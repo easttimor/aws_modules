@@ -26,10 +26,33 @@ resource "aws_organizations_organizational_unit" "this" {
 }
 
 ############################
-#  Organizations Accounts  #
+#  Organizations Accounts  
 ############################
 
 
 ##########################
-#  Organizations Policy  #
+#  Organizations Policy  
 ##########################
+locals {
+  policy_id = coalescelist(aws_organizations_policy.policy.*, [var.policy_id])
+}
+
+resource "aws_organizations_policy" "policy" {
+  for_each = var.create_organizations_policies ? { for poli in var.organizations_policy : poli.name => poli } : {}
+
+  name        = each.value.name
+  description = each.value.description
+
+  type = each.value.type
+
+  content = each.value.content
+
+  tags = var.tags
+}
+
+resource "aws_organizations_policy_attachment" "policy_attachment" {
+  count = length(var.target_id) > 0 ? length(var.target_id) : 0
+
+  policy_id = local.policy_id[0]
+  target_id = tolist(var.target_id)[count.index]
+}

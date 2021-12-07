@@ -48,3 +48,58 @@ variable "organizational_units" {
   ]
   description = "Organizational Units"
 }
+
+##########################
+# Organizational Policies 
+##########################
+variable create_organizations_policies {
+  type        = bool
+  default     = false
+  description = "Toggle Organizational Policies creation"
+}
+
+variable organizations_policy {
+  type = list(object({
+    name        = string
+    description = string
+    type        = string
+    content     = string
+  }))
+  default = [
+    {
+      name        = "my_policy",
+      description = "this is my policy",
+      type        = "SERVICE_CONTROL_POLICY",
+      content     = <<CONTENT
+{
+  "Version": "2012-10-17",
+  "Statement": {
+    "Effect": "Allow",
+    "Action": "*",
+    "Resource": "*"
+  }
+}
+CONTENT
+    }
+  ]
+  description = "Organizations Policies"
+}
+
+variable "policy_id" {
+  default     = ""
+  description = "The unique identifier (ID) of the policy that you want to attach to the target"
+}
+
+variable "target_id" {
+  type        = any
+  default     = []
+  description = "The unique identifier (ID) of the root, organizational unit, or account number that you want to attach the policy to"
+}
+
+# Tags
+
+variable "tags" {
+  type        = map(string)
+  description = "Tags"
+  default     = { "Name" = "" }
+} 

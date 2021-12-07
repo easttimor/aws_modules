@@ -19,26 +19,25 @@ locals {
     "guardduty.amazonaws.com",
     "access-analyzer.amazonaws.com",
     # "macie.amazonaws.com",
-    # Artifact
+    # "aws-artifact-account-sync.amazonaws.com",
     "account.amazonaws.com",
-    # AWS Backup
-    # AWS Marketplace - License Management
-    # CloudFormation StackSets
+    # "backup.amazonaws.com",
+    # "license-manager.amazonaws.com",
+    # "member.org.stacksets.cloudformation.amazonaws.com",
     "cloudtrail.amazonaws.com",
-    # Compute Optimizer
+    # "compute-optimizer.amazonaws.com",
     "config.amazonaws.com",
-    # Directory Service
-    # Firewall Manager
-    # License Manager
-    # RAM
-    # S3 Storage Lens
+    # "ds.amazonaws.com",
+    # "fms.amazonaws.com", # Firewall Manager
+    # "ram.amazonaws.com",
+    # "storage-lens.s3.amazonaws.com",
     "securityhub.amazonaws.com",
-    # Service Catalog
+    # "servicecatalog.amazonaws.com",
     "sso.amazonaws.com",
-    # Systems Manager
-    # Tag Policies
-
+    # "ssm.amazonaws.com",
+    # "tagpolicies.tag.amazonaws.com",     
   ]
+
   enabled_policy_types = [
     "AISERVICES_OPT_OUT_POLICY",
     # "BACKUP_POLICY",
@@ -59,6 +58,9 @@ locals {
       parent_id = "" # overridden by root ou
     },
   ]
+
+  # Organizational Policies
+  create_organizations_policy = false
 }
 
 module "organization" {
