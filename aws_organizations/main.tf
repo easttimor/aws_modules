@@ -1,3 +1,7 @@
+terraform {
+  experiments = [module_variable_optional_attrs]
+}
+
 data "aws_caller_identity" "current" {}
 
 ################
@@ -28,7 +32,17 @@ resource "aws_organizations_organizational_unit" "this" {
 ############################
 #  Organizations Accounts  
 ############################
+resource "aws_organizations_account" "this" {
 
+  for_each = var.create_organizations_accounts ? { for acc in var.organizations_accounts : acc.name => acc } : {}
+
+  name      = each.value.name
+  email     = each.value.email
+  parent_id = length(each.value.parent_id) > 0 ? each.value.parent_id : aws_organizations_organization.this[0].roots[0].id
+  role_name = length(each.value.role_name) > 0 ? each.value.role_name : null
+
+  # tags = var.tags
+}
 
 ##########################
 #  Organizations Policy  

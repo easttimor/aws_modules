@@ -50,15 +50,42 @@ variable "organizational_units" {
 }
 
 ##########################
+# Organizationals Accounts 
+##########################
+variable "create_organizations_accounts" {
+  type        = bool
+  default     = false
+  description = "Toggle creation of organizations accounts"
+}
+
+variable "organizations_accounts" {
+  type = set(object({
+    name      = string
+    email     = string
+    parent_id = string
+    role_name = optional(any)
+  }))
+  default = [
+    {
+      name      = "my_ou",
+      email     = "my@myorg.com",
+      parent_id = "parent_id",
+      role_name = null
+    }
+  ]
+  description = "Organizations Accounts"
+}
+
+##########################
 # Organizational Policies 
 ##########################
-variable create_organizations_policies {
+variable "create_organizations_policies" {
   type        = bool
   default     = false
   description = "Toggle Organizational Policies creation"
 }
 
-variable organizations_policy {
+variable "organizations_policy" {
   type = list(object({
     name        = string
     description = string
